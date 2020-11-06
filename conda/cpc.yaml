@@ -1,0 +1,8 @@
+name: cpc 
+channels:
+        - conda-forge
+        - bioconda
+        - defaults
+        - cbp44
+dependencies:
+        - cpc2=2.0b=py27_0 

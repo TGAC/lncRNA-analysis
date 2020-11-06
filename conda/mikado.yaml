@@ -1,0 +1,7 @@
+name: mikado 
+channels:
+        - conda-forge
+        - bioconda
+        - defaults
+dependencies:
+        - mikado=1.2.4=py36h24bf2e0_0 

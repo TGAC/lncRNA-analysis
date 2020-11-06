@@ -1,0 +1,8 @@
+name: trimgalore
+channels:
+        - conda-forge
+        - bioconda
+        - defaults
+dependencies:
+        - cutadapt=1.17=py35_0
+        - trim-galore=0.4.5

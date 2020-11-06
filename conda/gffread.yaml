@@ -1,0 +1,7 @@
+name: gffread 
+channels:
+        - conda-forge
+        - bioconda
+        - defaults
+dependencies:
+        - gffread=0.12.1=h8b12597_0 
