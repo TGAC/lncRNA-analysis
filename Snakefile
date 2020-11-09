@@ -186,18 +186,19 @@ rule cpat:
 		hexamer = config["dir"]["outdir"]+"/cpat/models/wheat.tsv"
 	output:
 		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.tsv",
+		tsv_lowercase = config["dir"]["outdir"]+"/cpat/output/{sample}.lowercase.tsv",
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/cpat && \
 			cpat.py -g {input.fasta}  -d {input.logitmodel} -x {input.hexamer} -o {output.tsv} && \
 			
 			# changing the case of Stringtie, CPAT changes Stringtie to STRINGTIE in previous rule 
-			perl -p -i -e 's/STRINGTIE/Stringtie/g' {output.tsv}
+			perl -p -e 's/STRINGTIE/Stringtie/g' {output.tsv} > {output.tsv_lowercase}
 		"""
 		
 rule filter_cpat:
 	input:
-		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.tsv",
+		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.lowercase.tsv",
 	output:
 		nctsv = config["dir"]["outdir"]+"/cpat/output/{sample}.nc.tsv",
 	params:
@@ -304,10 +305,12 @@ rule gene_transcript_pair:
 	output:
 		nc_pair = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
 		combine_pair = config["dir"]["outdir"]+"/GTF_iso_nc_transcript/{sample}.pair.tsv",
+	params: 
+				scripts = config["scripts"]
 	shell:
 		"""
-			python /hpc-home/thankia/MyComputer/scripts/test/tra.py < {input.nc_gtf} > {output.nc_pair} && \
-			python /hpc-home/thankia/MyComputer/scripts/test/tra.py < {input.combine_gtf} > {output.combine_pair}
+			python {params.scripts}/tra.py < {input.nc_gtf} > {output.nc_pair} && \
+			python {params.scripts}/tra.py < {input.combine_gtf} > {output.combine_pair}
 		"""
 
 rule coding_isoform_of_non_coding_transcripts:
