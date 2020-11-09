@@ -1,9 +1,6 @@
 configfile: "ncRNA.json"
 
-SAMPLES = ["ARI_D"]
-#, "ARI_F"]
-#, "ARI_G"]
-#, "ARI_R", "ARI_S", "ARI_V"]
+SAMPLES = ["ARI_D", "ARI_F", "ARI_G", "ARI_R", "ARI_S", "ARI_V"]
 #SAMPLES = ["JAG_D", "JAG_F", "JAG_R", "JAG_S", "JAG_V"]
 #SAMPLES = ["JUL_D", "JUL_F", "JUL_G", "JUL_R", "JUL_S", "JUL_V"]
 #SAMPLES = ["LAN_D", "LAN_F", "LAN_G", "LAN_R", "LAN_S", "LAN_V"]
@@ -19,7 +16,7 @@ READS = ["1", "2"]
 
 # Define input files
 def cpat_files(wildcards):
-	files = expand( config["dir"]["test_datadir"]+"/cpat/output/{sample}_nc.tsv", sample=SAMPLES)
+	files = expand( config["dir"]["outdir"]+"/cpat/output/{sample}_nc.tsv", sample=SAMPLES)
 	return files
 
 def get_gff(sample):
@@ -27,7 +24,7 @@ def get_gff(sample):
 
 
 rule all:
-		input : expand([config["dir"]["test_datadir"]+'/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html',  config["dir"]["test_datadir"]+"/GTF_nc_transcript_filtered/{sample}.gtf"], sample=SAMPLES, read=READS) 
+		input : expand([config["dir"]["outdir"]+'/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html',  config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf"], sample=SAMPLES, read=READS) 
 
 
 rule trimgalore:
@@ -35,10 +32,10 @@ rule trimgalore:
 		fq1 = config["dir"]["raw_datadir"]+"/{sample}_1.fq.gz",
 		fq2 = config["dir"]["raw_datadir"]+"/{sample}_2.fq.gz",
 	output:
-		fq1 = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}/{sample}_1_val_1.fq.gz",  
-				fq2 = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}/{sample}_2_val_2.fq.gz",
+		fq1 = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_1_val_1.fq.gz",  
+				fq2 = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_2_val_2.fq.gz",
 	params:
-		dir = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}",
+		dir = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}",
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/trimgalore && \
@@ -47,11 +44,11 @@ rule trimgalore:
 
 rule qc:
 	input:
-		fq = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}/{sample}_{read}_val_{read}.fq.gz",
+		fq = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_{read}_val_{read}.fq.gz",
 	output:
-		fq = config["dir"]["test_datadir"]+"/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html",
+		fq = config["dir"]["outdir"]+"/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html",
 	params:
-		fq_dir = config["dir"]["test_datadir"]+"/FastQC/{sample}_{read}/"	
+		fq_dir = config["dir"]["outdir"]+"/FastQC/{sample}_{read}/"	
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/fastqc && \
@@ -61,11 +58,11 @@ rule qc:
 
 rule align_hisat:
 	input:
-		fq1 = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}/{sample}_1_val_1.fq.gz",
-		fq2 = config["dir"]["test_datadir"]+"/Trimmed_Reads/{sample}/{sample}_2_val_2.fq.gz",
+		fq1 = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_1_val_1.fq.gz",
+		fq2 = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_2_val_2.fq.gz",
 	output: 
-		sam = temp(config["dir"]["test_datadir"]+"/SAM/{sample}.sam"),
-		summary = config["dir"]["test_datadir"]+"/SAM/{sample}_summary.txt",
+		sam = temp(config["dir"]["outdir"]+"/SAM/{sample}.sam"),
+		summary = config["dir"]["outdir"]+"/SAM/{sample}_summary.txt",
 	threads: 4
 	shell:
 		"""
@@ -74,8 +71,8 @@ rule align_hisat:
 		"""
 
 rule sam2bam:
-	input:  config["dir"]["test_datadir"]+"/SAM/{sample}.sam"
-	output: temp(config["dir"]["test_datadir"]+"/BAM/{sample}.bam")
+	input:  config["dir"]["outdir"]+"/SAM/{sample}.sam"
+	output: temp(config["dir"]["outdir"]+"/BAM/{sample}.bam")
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/samtools && \
@@ -83,8 +80,8 @@ rule sam2bam:
 		"""
 
 rule sort_bam:
-	input:  config["dir"]["test_datadir"]+"/BAM/{sample}.bam"
-	output: config["dir"]["test_datadir"]+"/BAM/{sample}_sorted.bam"
+	input:  config["dir"]["outdir"]+"/BAM/{sample}.bam"
+	output: config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam"
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/samtools && \
@@ -92,8 +89,8 @@ rule sort_bam:
 		"""
 
 rule index_bam:
-	input:	config["dir"]["test_datadir"]+"/BAM/{sample}_sorted.bam"
-	output: config["dir"]["test_datadir"]+"/BAM/{sample}.bam.csi"
+	input:	config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam"
+	output: config["dir"]["outdir"]+"/BAM/{sample}.bam.csi"
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/samtools && \
@@ -103,13 +100,13 @@ rule index_bam:
 
 rule stringtie:
 	input: 
-		bam = config["dir"]["test_datadir"]+"/BAM/{sample}_sorted.bam",
+		bam = config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam",
 		gff = lambda wc: config['sample_gff'][wc.sample]
 	output:
-		gtf = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
-		abundance = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}.out"
+		gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
+		abundance = config["dir"]["outdir"]+"/GTF_stringtie/{sample}.out"
 	params:
-		ballgown = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_ballgown_input/",
+		ballgown = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_ballgown_input/",
 		label = "{sample}-Stringtie"
 	wildcard_constraints:
 	    sample = '\w+'
@@ -123,12 +120,12 @@ rule gffcompare_for_novel_transcripts:
 	input:
 #		ref_gff = lambda wc: get_gff('{sample}'.format(sample=wc.sample)),
 		ref_gff = lambda wc: config['sample_gff'][wc.sample],
-		query_gtf = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
+		query_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
 	output:
-		novel_transcripts_list = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_novel_transcripts.txt",
-		novel_transcripts = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
+		novel_transcripts_list = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.txt",
+		novel_transcripts = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
 	params:
-		gtf_dir = config["dir"]["test_datadir"]+"/GTF_stringtie/",
+		gtf_dir = config["dir"]["outdir"]+"/GTF_stringtie/",
 		label = "{sample}",
 		gffcompare_file = "{sample}.{sample}_stringtie.gtf.tmap",
 		column = "-f5" # -f4 for genes
@@ -145,10 +142,10 @@ rule gffcompare_for_novel_transcripts:
 
 rule novel_transcripts_fasta:
 	input:
-		novel_transcripts_gtf = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
+		novel_transcripts_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
 		reference_fasta = config["dir"]["ref_genome"]
 	output:
-		novel_transcripts_fasta =  config["dir"]["test_datadir"]+"/FASTA/{sample}_novel_transcripts.fa"
+		novel_transcripts_fasta =  config["dir"]["outdir"]+"/FASTA/{sample}_novel_transcripts.fa"
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/gffread && \
@@ -160,7 +157,7 @@ rule CPAT_training_data:
 		cds = config["dir"]["cpat"]["training-data"]["cds"],
 		ncrna = config["dir"]["cpat"]["training-data"]["ncrna"]
 	output:
-		hexamer = config["dir"]["test_datadir"]+"/cpat/models/wheat.tsv"
+		hexamer = config["dir"]["outdir"]+"/cpat/models/wheat.tsv"
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/cpat && \
@@ -171,11 +168,11 @@ rule cpat_trainig_model:
 	input:
 		cds = config["dir"]["cpat"]["training-data"]["cds"],
 		ncrna = config["dir"]["cpat"]["training-data"]["ncrna"],
-		hexamer = config["dir"]["test_datadir"]+"/cpat/models/wheat.tsv"
+		hexamer = config["dir"]["outdir"]+"/cpat/models/wheat.tsv"
 	params:
-		logitmodel = config["dir"]["test_datadir"]+"/cpat/models/wheat",
+		logitmodel = config["dir"]["outdir"]+"/cpat/models/wheat",
 	output:
-		RData = config["dir"]["test_datadir"]+"/cpat/models/wheat.logit.RData"
+		RData = config["dir"]["outdir"]+"/cpat/models/wheat.logit.RData"
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/cpat && \
@@ -184,31 +181,47 @@ rule cpat_trainig_model:
 
 rule cpat:
 	input:
-		fasta =  config["dir"]["test_datadir"]+"/FASTA/{sample}_novel_transcripts.fa",
-		logitmodel = config["dir"]["test_datadir"]+"/cpat/models/wheat.logit.RData",
-		hexamer = config["dir"]["test_datadir"]+"/cpat/models/wheat.tsv"
+		fasta =  config["dir"]["outdir"]+"/FASTA/{sample}_novel_transcripts.fa",
+		logitmodel = config["dir"]["outdir"]+"/cpat/models/wheat.logit.RData",
+		hexamer = config["dir"]["outdir"]+"/cpat/models/wheat.tsv"
 	output:
-		tsv = config["dir"]["test_datadir"]+"/cpat/output/{sample}.tsv",
-		nctsv = config["dir"]["test_datadir"]+"/cpat/output/{sample}_nc.tsv",
-		ncsortedtsv = config["dir"]["test_datadir"]+"/cpat/output/{sample}_nc_sorted.tsv",
-	params:
-		cutoff = 0.4	
+		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.tsv",
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/cpat && \
 			cpat.py -g {input.fasta}  -d {input.logitmodel} -x {input.hexamer} -o {output.tsv} && \
-			awk -F "\t" '{{ if($6 <= {params.cutoff} ) {{print $1}} }}' {output.tsv} > {output.nctsv} && \
 			
 			# changing the case of Stringtie, CPAT changes Stringtie to STRINGTIE in previous rule 
-			perl -p -i -e 's/STRINGTIE/Stringtie/g' {output.nctsv} && \
-			sort {output.nctsv} > {output.ncsortedtsv}
+			perl -p -i -e 's/STRINGTIE/Stringtie/g' {output.tsv}
+		"""
+		
+rule filter_cpat:
+	input:
+		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.tsv",
+	output:
+		nctsv = config["dir"]["outdir"]+"/cpat/output/{sample}.nc.tsv",
+	params:
+		cutoff = 0.4
+	shell:
+		"""
+			awk -F "\t" '{{ if($6 <= {params.cutoff} ) {{print $1}} }}' {input.tsv} > {output.nctsv}
+		"""
+		
+rule sort_cpat:
+	input:
+		nctsv = config["dir"]["outdir"]+"/cpat/output/{sample}.nc.tsv",
+	output:
+	    ncsortedtsv = config["dir"]["outdir"]+"/cpat/output/{sample}.nc_sorted.tsv",
+	shell:
+		"""
+			sort {input.nctsv} > {output.ncsortedtsv}
 		"""
 
 rule cpc:
 	input:
-		fasta =  config["dir"]["test_datadir"]+"/FASTA/{sample}_novel_transcripts.fa",
+		fasta =  config["dir"]["outdir"]+"/FASTA/{sample}_novel_transcripts.fa",
 	output:
-		tsv = config["dir"]["test_datadir"]+"/cpc/output/{sample}.tsv",
+		tsv = config["dir"]["outdir"]+"/cpc/output/{sample}.tsv",
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/cpc && \
@@ -217,9 +230,9 @@ rule cpc:
 		
 rule filter_cpc:
 	input:
-		tsv = config["dir"]["test_datadir"]+"/cpc/output/{sample}.tsv",
+		tsv = config["dir"]["outdir"]+"/cpc/output/{sample}.tsv",
 	output:
-		nctsv = config["dir"]["test_datadir"]+"/cpc/output/{sample}.nc.tsv",
+		nctsv = config["dir"]["outdir"]+"/cpc/output/{sample}.nc.tsv",
 	params:
 		filter = "noncoding"	
 	shell:
@@ -229,9 +242,9 @@ rule filter_cpc:
 
 rule sort_cpc:
 	input:
-		nctsv = config["dir"]["test_datadir"]+"/cpc/output/{sample}.nc.tsv",
+		nctsv = config["dir"]["outdir"]+"/cpc/output/{sample}.nc.tsv",
 	output:
-		ncsortedtsv = config["dir"]["test_datadir"]+"/cpc/output/{sample}.nc_sorted.tsv",
+		ncsortedtsv = config["dir"]["outdir"]+"/cpc/output/{sample}.nc_sorted.tsv",
 	shell:
 		"""
 			sort {input.nctsv} > {output.ncsortedtsv}
@@ -239,10 +252,10 @@ rule sort_cpc:
 		
 rule cpat_cpc_intersect:
     input:
-        cpat = config["dir"]["test_datadir"]+"/cpat/output/{sample}_nc_sorted.tsv",
-        cpc = config["dir"]["test_datadir"]+"/cpc/output/{sample}.nc_sorted.tsv",
+        cpat = config["dir"]["outdir"]+"/cpat/output/{sample}.nc_sorted.tsv",
+        cpc = config["dir"]["outdir"]+"/cpc/output/{sample}.nc_sorted.tsv",
     output:
-        comm = config["dir"]["test_datadir"]+"/nc/{sample}.common_nc.tsv",
+        comm = config["dir"]["outdir"]+"/nc/{sample}.common_nc.tsv",
     shell:
         """
             comm -12 {input.cpat} {input.cpc} > {output.comm}
@@ -251,11 +264,11 @@ rule cpat_cpc_intersect:
 rule non_coding_transcript_from_cpat:
 	input:
 		#for cpc
-		tsv =  config["dir"]["test_datadir"]+"/nc/{sample}.common_nc.tsv",
-		#tsv =  config["dir"]["test_datadir"]+"/cpat/output/{sample}_nc_sorted.tsv",
-		query_gtf = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
+		tsv =  config["dir"]["outdir"]+"/nc/{sample}.common_nc.tsv",
+		#tsv =  config["dir"]["outdir"]+"/cpat/output/{sample}_nc_sorted.tsv",
+		query_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
 	output:
-		novel_transcripts = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.gtf",
+		novel_transcripts = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
 	shell:
 		"""
 			grep -F -f {input.tsv} {input.query_gtf} > {output.novel_transcripts}
@@ -263,9 +276,9 @@ rule non_coding_transcript_from_cpat:
 
 rule genelist_for_non_coding_transcripts:
 	input:
-		nc_gtf =  config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.gtf",
+		nc_gtf =  config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
 	output:
-		gene_list = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.tsv"
+		gene_list = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.tsv"
 	shell:
 		"""
 			#keeping " to avoid matching with wrong gene ids
@@ -275,10 +288,10 @@ rule genelist_for_non_coding_transcripts:
 			
 rule all_genes_for_non_coding_transcript:
 	input:
-		query_gtf = config["dir"]["test_datadir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
-		gene_list = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.tsv"
+		query_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
+		gene_list = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.tsv"
 	output:
-		transcripts = config["dir"]["test_datadir"]+"/GTF_iso_nc_transcript/{sample}.gtf"
+		transcripts = config["dir"]["outdir"]+"/GTF_iso_nc_transcript/{sample}.gtf"
 	shell:
 		"""
 			grep -F -f {input.gene_list} {input.query_gtf} > {output.transcripts}
@@ -286,11 +299,11 @@ rule all_genes_for_non_coding_transcript:
 			
 rule gene_transcript_pair:
 	input:
-		nc_gtf = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.gtf",
-		combine_gtf = config["dir"]["test_datadir"]+"/GTF_iso_nc_transcript/{sample}.gtf",
+		nc_gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
+		combine_gtf = config["dir"]["outdir"]+"/GTF_iso_nc_transcript/{sample}.gtf",
 	output:
-		nc_pair = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
-		combine_pair = config["dir"]["test_datadir"]+"/GTF_iso_nc_transcript/{sample}.pair.tsv",
+		nc_pair = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
+		combine_pair = config["dir"]["outdir"]+"/GTF_iso_nc_transcript/{sample}.pair.tsv",
 	shell:
 		"""
 			python /hpc-home/thankia/MyComputer/scripts/test/tra.py < {input.nc_gtf} > {output.nc_pair} && \
@@ -299,10 +312,10 @@ rule gene_transcript_pair:
 
 rule coding_isoform_of_non_coding_transcripts:
 	input:
-		nc_pair = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
-		combine_pair = config["dir"]["test_datadir"]+"/GTF_iso_nc_transcript/{sample}.pair.tsv",
+		nc_pair = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
+		combine_pair = config["dir"]["outdir"]+"/GTF_iso_nc_transcript/{sample}.pair.tsv",
 	output:
-		diff = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.ncgenes.tsv",
+		diff = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.ncgenes.tsv",
 	params: 
 				scripts = config["scripts"]
 	shell:
@@ -312,12 +325,12 @@ rule coding_isoform_of_non_coding_transcripts:
 
 rule non_coding_genes:
     input:
-        gtf = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.gtf",
-        genes = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.ncgenes.tsv"
+        gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
+        genes = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.ncgenes.tsv"
     output:
-        gff = temp(config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.gff3"),
-        gtf = config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
-        filtered_gff = temp(config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.filtered.gff3")
+        gff = temp(config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gff3"),
+        gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
+        filtered_gff = temp(config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gff3")
     shell:
         """
             source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/mikado && \
@@ -328,8 +341,8 @@ rule non_coding_genes:
 
 
 rule filter_non_coding_genes:
-	input: config["dir"]["test_datadir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
-	output: config["dir"]["test_datadir"]+"/GTF_nc_transcript_filtered/{sample}.gtf",
+	input: config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
+	output: config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf",
 	shell:
 		"""
 			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/gffcompare && \
