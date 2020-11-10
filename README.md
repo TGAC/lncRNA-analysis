@@ -14,5 +14,5 @@ A simple overview of pipeline is as below:
 ### Developers:
 
 - Wilfried Haerty (Earlham Institute)
-- Anil Thanki (Earlham Institute)
+- Anil S. Thanki (Earlham Institute)
 
