@@ -4,4 +4,4 @@ channels:
         - bioconda
         - defaults
 dependencies:
-        - mikado=1.2.4=py36h24bf2e0_0 
+        - mikado=2.0rc2=py38h6ed170a_1
