@@ -144,6 +144,7 @@ rule gffcompare_for_novel_transcripts:
 		query_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
 	output:
 		novel_transcripts_list = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.txt",
+		novel_transcripts_list2 = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts_with_quotes.txt",
 		novel_transcripts = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
 	params:
 		gtf_dir = config["dir"]["outdir"]+"/GTF_stringtie/",
@@ -158,6 +159,7 @@ rule gffcompare_for_novel_transcripts:
 			cd {params.gtf_dir} && \
 			gffcompare -r {input.ref_gff} {input.query_gtf} -o {params.label} && \
 			cat {params.gffcompare_file} | awk '$3=="u"{{print $0}}' | cut {params.column} | sort | uniq > {output.novel_transcripts_list} && \
+			sed 's/^/"/; s/$/"/' {output.novel_transcripts_list} > {output.novel_transcripts_list2} && \
 			grep -F -f {output.novel_transcripts_list} {input.query_gtf} > {output.novel_transcripts}	
 		"""
 
@@ -403,6 +405,6 @@ rule filter_non_coding_genes:
 	output: config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf",
 	shell:
 		"""
-			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/gffcompare && \
+			source activate /ei/software/testing/python_miniconda/4.5.4_py3.6_cs/x86_64/envs/gffread && \
 			gffread {input} -T -l 200 -o {output}
 		"""
