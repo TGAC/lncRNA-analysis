@@ -1,32 +1,38 @@
+## Snakemake - lncRNA analysis
+##
+## Pipeline is to find non-coding RNAs from raw reads, 
+## using reference genome and refenrece gene models.
+##
+## Anil S. Thanki
+## GitHub: https://github.com/anilthanki/
+## Anil.Thanki@earlham.ac.uk
+##
+##
+
+
+## Configuration file containing absolute file locations
 configfile: "ncRNA.json"
 
-#SAMPLES = ["ARI_D", "ARI_F", "ARI_G", "ARI_R", "ARI_S", "ARI_V"]
-#SAMPLES = ["JAG_D", "JAG_F", "JAG_R", "JAG_S", "JAG_V"] 
-#SAMPLES = ["JUL_D", "JUL_F", "JUL_G", "JUL_R", "JUL_S", "JUL_V"]
-#SAMPLES = ["LAN_D", "LAN_F", "LAN_G", "LAN_R", "LAN_S", "LAN_V"]
-#SAMPLES = ["LER_D", "LER_F", "LER_R", "LER_S", "LER_V"]
-#SAMPLES = ["MAC_D", "MAC_F", "MAC_R", "MAC_S", "MAC_V"]
-#SAMPLES = ["MAT_D", "MAT_F", "MAT_G", "MAT_R", "MAT_S", "MAT_V"]
-#SAMPLES = ["NOR_D", "NOR_F", "NOR_G", "NOR_R", "NOR_S", "NOR_V"]
-SAMPLES = ["STA_D", "STA_F", "STA_R", "STA_S", "STA_V"]
+SAMPLES = ["ARI_D", "ARI_F", "ARI_G", "ARI_R", "ARI_S", "ARI_V"]
 
 READS = ["1", "2"]
-#, "ARI_G", "ARI_R", "ARI_S", "ARI_V"]
 
 
-# Define input files
-def cpat_files(wildcards):
-	files = expand( config["dir"]["outdir"]+"/cpat/output/{sample}_nc.tsv", sample=SAMPLES)
-	return files
+# --- Help Rules --- #
+## help :                                       Prints help comments for Snakefile
+rule help:
+    input: "Snakefile"
+    shell:
+        "sed -n 's/^##//p' {input}"
+        
 
-def get_gff(sample):
-	return config['sample_gff'][sample]
-
-
+## all :                                        List out final output files
 rule all:
-		#input : expand([config["dir"]["outdir"]+'/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html',  config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf"], sample=SAMPLES, read=READS) 
-		input : expand([config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf"], sample=SAMPLES, read=READS)
+		input : expand([config["dir"]["outdir"]+'/FastQC/{sample}_{read}/{sample}_{read}_val_{read}_fastqc.html',  config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf"], sample=SAMPLES, read=READS) 
+		
 
+
+## trimgalore :                                 Trims reads and removes adapters
 rule trimgalore:
 	input:
 		fq1 = config["dir"]["raw_datadir"]+"/{sample}_1.fq.gz",
@@ -43,6 +49,8 @@ rule trimgalore:
 			trim_galore --illumina -o {params.dir} --paired {input.fq1} {input.fq2}
 		"""
 
+
+## qc :                                         Performs quality check on trimmed reads
 rule qc:
 	input:
 		fq = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_{read}_val_{read}.fq.gz",
@@ -58,6 +66,9 @@ rule qc:
 			fastqc {input.fq} --outdir={params.fq_dir}
 		"""
 
+
+## align_hista :                                Performs alignments using HISAT on trimmed reads
+##                                              SAM files are temp files, which will be deleted after all rules that use it as an input are completed
 rule align_hisat:
 	input:
 		fq1 = config["dir"]["outdir"]+"/Trimmed_Reads/{sample}/{sample}_1_val_1.fq.gz",
@@ -77,6 +88,9 @@ rule align_hisat:
 			hisat2 -q -p {threads} --dta -x {params.index} -1 {input.fq1} -2 {input.fq2} -S {output.sam} --summary {output.summary} 
 		"""
 
+
+## sam2bam :                                    Converts SAM to BAM format
+##                                              BAM files are temp files, which will be deleted after all rules that use it as an input are completed
 rule sam2bam:
 	input:  config["dir"]["outdir"]+"/SAM/{sample}.sam"
 	output: temp(config["dir"]["outdir"]+"/BAM/{sample}.bam")
@@ -87,6 +101,8 @@ rule sam2bam:
 			samtools view -b {input} > {output} 
 		"""
 
+
+## sort_bam :                                   Sorts BAM files
 rule sort_bam:
 	input:  config["dir"]["outdir"]+"/BAM/{sample}.bam"
 	output: config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam"
@@ -97,6 +113,8 @@ rule sort_bam:
 			samtools sort {input} > {output}
 		"""
 
+
+## index_bam :                                  Indexes BAM alignments
 rule index_bam:
 	input:	config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam"
 	output: config["dir"]["outdir"]+"/BAM/{sample}.bam.csi"
@@ -108,6 +126,8 @@ rule index_bam:
 		"""
 
 
+## stringtie :                                  StringTie is used to annotate gene models from the alignment files using provided gene information as reference
+##                                              Here also produces abundance files
 rule stringtie:
 	input: 
 		bam = config["dir"]["outdir"]+"/BAM/{sample}_sorted.bam",
@@ -127,6 +147,9 @@ rule stringtie:
 			stringtie {input.bam} -p 4 -G {input.gff} -o {output.gtf} -A {output.abundance} -b {params.ballgown} -l {params.label}
 		"""
 
+
+## gffcompare_for_novel_transcripts :           GFFcompare is used to find novel transcript annotated by StringTie
+##                                              Class 'u' is used to fetch novel genes
 rule gffcompare_for_novel_transcripts:
 	input:
 		ref_gff = lambda wc: config['sample_gff'][wc.sample],
@@ -153,6 +176,8 @@ rule gffcompare_for_novel_transcripts:
 			grep -F -f {output.novel_transcripts_list2} {input.query_gtf} > {output.novel_transcripts}	
 		"""
 
+
+## novel_transcript_fasta :                     GFFread is used to fetch FASTA for novel transcript from reference genome
 rule novel_transcripts_fasta:
 	input:
 		novel_transcripts_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_novel_transcripts.gtf",
@@ -169,6 +194,8 @@ rule novel_transcripts_fasta:
 			gffread -w {output.novel_transcripts_fasta} -g {input.reference_fasta} {input.novel_transcripts_gtf}
 		"""
 
+
+## cpat_training_data :                         Prepare hexamer files used in CPAT run using provided training dataset
 rule CPAT_training_data:
 	input:
 		cds = config["dir"]["cpat"]["training-data"]["cds"],
@@ -182,6 +209,8 @@ rule CPAT_training_data:
 			make_hexamer_tab.py -c {input.cds} -n {input.ncrna} > {output.hexamer}
 		"""
 
+
+## cpat_trainig_model :                         Prepare logitmodel files used in CPAT run using provided training dataset
 rule cpat_trainig_model:
 	input:
 		cds = config["dir"]["cpat"]["training-data"]["cds"],
@@ -198,6 +227,8 @@ rule cpat_trainig_model:
 			make_logitModel.py -c {input.cds} -n {input.ncrna} -x {input.hexamer} -o {params.logitmodel}
 		"""
 
+
+## cpat :                                       Predict coding potential of novel transcripts using CPAT
 rule cpat:
 	input:
 		fasta =  config["dir"]["outdir"]+"/FASTA/{sample}_novel_transcripts.fa",
@@ -216,6 +247,9 @@ rule cpat:
 			perl -p -e 's/STRINGTIE/Stringtie/g' {output.tsv} > {output.tsv_lowercase}
 		"""
 		
+
+
+## filter_cpat :                                Separates non-coding transcripts from CPAT analysis using coding potential cutoff
 rule filter_cpat:
 	input:
 		tsv = config["dir"]["outdir"]+"/cpat/output/{sample}.lowercase.tsv",
@@ -227,7 +261,9 @@ rule filter_cpat:
 		"""
 			awk -F "\t" '{{ if($6 <= {params.cutoff} ) {{print $1}} }}' {input.tsv} > {output.nctsv}
 		"""
-		
+
+
+## sort_cpat :                                  Sorts non-coding transcripts for comparison with CPC prediction
 rule sort_cpat:
 	input:
 		nctsv = config["dir"]["outdir"]+"/cpat/output/{sample}.nc.tsv",
@@ -238,6 +274,10 @@ rule sort_cpat:
 			sort {input.nctsv} > {output.ncsortedtsv}
 		"""
 
+
+
+
+## cpc :                                        Predict coding potential of novel transcripts using CPC
 rule cpc:
 	input:
 		fasta =  config["dir"]["outdir"]+"/FASTA/{sample}_novel_transcripts.fa",
@@ -249,7 +289,9 @@ rule cpc:
 		"""
 			CPC2.py -i {input.fasta}  -o {output.tsv}
 		"""
-		
+
+
+## filter_cpc :                                 Separates non-coding transcripts from CPC analysis
 rule filter_cpc:
 	input:
 		tsv = config["dir"]["outdir"]+"/cpc/output/{sample}.tsv",
@@ -262,6 +304,8 @@ rule filter_cpc:
 			awk '{{ if($8 == "{params.filter}" ) {{print $1}} }}' {input.tsv} > {output.nctsv}
 		"""
 
+
+## sort_cpc :                                   Sorts non-coding transcripts for comparison with CPAT prediction
 rule sort_cpc:
 	input:
 		nctsv = config["dir"]["outdir"]+"/cpc/output/{sample}.nc.tsv",
@@ -271,7 +315,9 @@ rule sort_cpc:
 		"""
 			sort {input.nctsv} > {output.ncsortedtsv}
 		"""
-		
+
+
+## cpat_cpc_intersect :                         Finds common non-coding transcripts predicted by both CPAT and CPC
 rule cpat_cpc_intersect:
     input:
         cpat = config["dir"]["outdir"]+"/cpat/output/{sample}.nc.sorted.tsv",
@@ -282,7 +328,9 @@ rule cpat_cpc_intersect:
         """
             comm -12 {input.cpat} {input.cpc} > {output.comm}
 		"""
-		
+
+
+## non_coding_transcript :                      Fetches non-coding transcripts using output of 'cpat_cpc_intersect' from novel transcripts generated by StringTie
 rule non_coding_transcript_from_cpat:
 	input:
 		tsv =  config["dir"]["outdir"]+"/nc/{sample}.common_nc.tsv",
@@ -296,6 +344,8 @@ rule non_coding_transcript_from_cpat:
 			grep -F -f {output.tsv} {input.query_gtf} > {output.novel_transcripts}
 		"""
 
+
+## genelist_for_non_coding_transcripts :        Fetches gene list from GTF of 'non_coding_transcript'
 rule genelist_for_non_coding_transcripts:
 	input:
 		nc_gtf =  config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
@@ -307,7 +357,10 @@ rule genelist_for_non_coding_transcripts:
 			perl -lne 'print @m if @m=(/((?:gene_id)\s+\S+)/g);' {input.nc_gtf} | perl -p -i -e 's/gene_id|;| //g' > {output.gene_list} && \
 			sort {output.gene_list} | uniq
 		"""
-			
+
+
+
+## all_genes_for_non_coding_transcript :        Fetches all transcript of gene list to look for coding isoforms
 rule all_genes_for_non_coding_transcript:
 	input:
 		query_gtf = config["dir"]["outdir"]+"/GTF_stringtie/{sample}_stringtie.gtf",
@@ -319,7 +372,10 @@ rule all_genes_for_non_coding_transcript:
 			# gene list is already quoted so not adding quotes again, could use Mikado
 			grep -F -f {input.gene_list} {input.query_gtf} > {output.transcripts}
 		"""
-			
+
+
+## gene_transcript_pair :                       Prepares gene id, transcript id list from GTF of 'non_coding_transcript' and 'all_genes_for_non_coding_transcript'
+##                                              First GTF contains non-coding transcripts and later contains all isoforms of non-codong transcripts
 rule gene_transcript_pair:
 	input:
 		nc_gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
@@ -335,6 +391,8 @@ rule gene_transcript_pair:
 			python {params.scripts}/tra.py < {input.combine_gtf} > {output.combine_pair}
 		"""
 
+
+## coding_isoform_of_non_coding_transcripts :   Prepares a list of genes which has coding isoforms of non-codong transcripts
 rule coding_isoform_of_non_coding_transcripts:
 	input:
 		nc_pair = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.pair.tsv",
@@ -348,6 +406,11 @@ rule coding_isoform_of_non_coding_transcripts:
 			python {params.scripts}/filter.py {input.nc_pair} {input.combine_pair} > {output.diff}
 		"""
 
+
+## non_coding_genes :                           Prepares GTF of the genes with only non-codong transcripts
+##                                              Uses Mikado to convert GTF to GFF then 
+##                                              reverse grep within Mikado to fetch genes which are not present in input list 
+##                                              and converts it back to GTF
 rule non_coding_genes:
     input:
         gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
@@ -367,6 +430,8 @@ rule non_coding_genes:
         """
 
 
+
+## filter_non_coding_genes :                    Filters non-coding genes based on transcript length 
 rule filter_non_coding_genes:
 	input: config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
 	output: config["dir"]["outdir"]+"/GTF_nc_transcript_filtered/{sample}.gtf",
