@@ -18,9 +18,6 @@ A simple overview of pipeline is as below:
 <img src="img/pipeline.svg" height=1000px title="pipeline-overview" />
 
 ## Authors
-
-### Developers:
-
 - Wilfried Haerty (Earlham Institute)
 - Anil S. Thanki (Earlham Institute)
 
