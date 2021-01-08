@@ -408,25 +408,19 @@ rule coding_isoform_of_non_coding_transcripts:
 
 
 ## non_coding_genes :                           Prepares GTF of the genes with only non-codong transcripts
-##                                              Uses Mikado to convert GTF to GFF then 
-##                                              reverse grep within Mikado to fetch genes which are not present in input list 
-##                                              and converts it back to GTF
+##                                              Adds quotes around id using sed 
+##                                              uses reverse grep to fetch genes which are not present in input list 
 rule non_coding_genes:
     input:
         gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gtf",
         genes = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.ncgenes.tsv"
     output:
-        gff = temp(config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.gff3"),
-        gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gtf",
-        filtered_gff = temp(config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gff3")
-    conda:
-	    "conda/mikado.yaml"
+        quoted_genes = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.ncgenes.quoted.tsv",
+        gtf = config["dir"]["outdir"]+"/GTF_nc_transcript/{sample}.filtered.gtf"
     shell:
         """
-            # Checkout Mikado Bio Python error
-            mikado util convert -if gtf -of gff3 {input.gtf} > {output.gff} && \
-            mikado util grep -v --genes {input.genes} {output.gff} > {output.filtered_gff} && \
-            mikado util convert -if gff3 -of gtf {output.filtered_gff} > {output.gtf}
+            sed 's/^/"/; s/$/"/' {input.genes} > {output.quoted_genes} && \
+            grep -v -F -f {output.quoted_genes} {input.gtf} > {output.gtf}
         """
 
 
