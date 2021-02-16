@@ -50,12 +50,6 @@ while i<args_len:
 				continue
 	i = i+1		
 
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
-# The maximum width in characters of a column in the repr of a pandas data structure
-pd.set_option('display.max_colwidth', None)
-
 df = pd.DataFrame(matrix).T
 
 # adds 0 where data is missing

@@ -149,7 +149,7 @@ rule tpm_quant:
 		replicate = '\w+'
 	shell:
 		"""
-			awk -F "\t" "{{ {{print $1"\t"$4}} }}" {input.quant_genes} > {output.tpm_genes}
+			awk -F "\t" '{{ {{print $1"\t"$4}} }}' {input.quant_genes} > {output.tpm_genes}
 		"""
 
 
@@ -164,6 +164,8 @@ rule tpm_matrix:
 		scripts = config["scripts"]
 	wildcard_constraints:
 		species = '\w+'
+	conda:
+	    "conda/pandas.yaml"
 	shell:
 		"""
 			python {params.scripts}/tpm_matrix_filter.py {input.tpms} > {output.tpm_matrix}
@@ -181,7 +183,7 @@ rule tpm_mean:
 		replicate = '\w+'
 	shell:
 		"""
-			awk 'NR==1{{next}}; {{ printf("%s\t", $1); if(NF==2) printf("%.2f\n", $2); else if(NF==3) printf("%.2f\n", ($2 + $3)/2); else if(NF==4) printf("%.2f\n", ($2 + $3 + $4)/3);}}' {input.tpm_matrix} > {output.tpm_matrix_filtered}
+			awk 'NR==1{{next}}; {{ printf("%s\t", $1); if(NF==2) printf("%.2f\\n", $2); else if(NF==3) printf("%.2f\\n", ($2 + $3)/2); else if(NF==4) printf("%.2f\\n", ($2 + $3 + $4)/3);}}' {input.tpm_matrix} > {output.tpm_matrix_filtered}
 		"""
 
 	
@@ -195,5 +197,5 @@ rule tpm_filter:
 		replicate = '\w+'
 	shell:
 		"""
-			awk '{{if ($2 > 1) printf("%s\t%.f\n", $1,$2)}}' {input.tpm_matrix_filtered} > {output.tpm_matrix_mean}
+			awk '{{if ($2 > 1) printf("%s\t%.f\\n", $1,$2)}}' {input.tpm_matrix_filtered} > {output.tpm_matrix_mean}
 		"""
