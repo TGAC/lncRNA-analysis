@@ -1,0 +1,199 @@
+## Snakemake - lncRNA analysis
+##
+## Pipeline is to find non-coding RNAs from raw reads, 
+## using reference genome and refenrece gene models.
+##
+## Anil S. Thanki
+## GitHub: https://github.com/anilthanki/
+## Anil.Thanki@earlham.ac.uk
+##
+## This Snakefile is second step of the pipeline, where lncRNAs 
+## have been identified for different tissues/samples/condition.
+##
+## This step takes the replicated reads, one GTF file per 
+## sample or tissue and it will quantify lncRNAs and final output
+## is a expressed lncRNAs
+##
+
+
+# Configuration file containing absolute file locations
+configfile: "ncRNA_salmon_index.json"
+
+
+import re
+
+# This function takes the REPLICATES as input and return list of 
+# samples. NAming convetion is {species/ref}_{condition/tissue}{replicate_number}
+def get_samples():
+	SAMPLES = []
+	for i in REPLICATES:
+		SAMPLES.append(re.sub('\d', '', i))
+	SAMPLES = list(dict.fromkeys(SAMPLES))
+	return SAMPLES
+
+
+REPLICATES = ["LAN_D1", "LAN_F1", "LAN_G1", "LAN_R3", "LAN_S3", "LAN_V3", "LAN_D3", "LAN_F3", "LAN_R2", "LAN_S2", "LAN_V2", "LAN_D2", "LAN_F2", "LAN_R1", "LAN_S1", "LAN_V1"]
+
+
+SPECIESS = [REPLICATES[0].split("_")[0]]
+
+
+SAMPLES = get_samples()
+
+
+# This function returns list of GTF files for samples to be merged by StringTie
+def stringtie_inputs(wildcards):
+	files = expand("/ei/projects/e/e0bf104e-acf4-43ec-b273-9c0d47e9f44a/data/thankia/GTF_nc_transcript_filtered/{sample}.gtf", sample=SAMPLES)
+	return files
+
+
+# This function returns list of TPM files to create TPM matrix
+def tpm_matrix_inputs(sample):
+	RESULTS = [i for i in REPLICATES if i.startswith(sample)]
+	files = expand(config["dir"]["outdir"]+"/salmon_count/{result}_quant/tpm.genes.sf", result=RESULTS)
+	return files
+
+
+
+
+
+## all :                        List out final output files
+rule all:
+	input :
+		expand([config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.mean_morethan1.tsv"], sample=SAMPLES)
+
+
+## stringtie_merge :            Merges lncRNAs of different experiment into one per species
+##                              Uses 'stringtie_inputs' function to generate list of GTFs
+rule stringtie_merge:
+	input:
+		gtf = stringtie_inputs
+	output:
+		gtf = config["dir"]["outdir"]+"/GTF_merged/{species}.gtf"
+	conda:
+		"conda/stringtie.yaml"
+	shell:
+		"""
+			stringtie --merge -o {output.gtf} {input.gtf}
+		"""
+
+
+## novel_transcripts_fasta :    Create Trasncript FASTAs for lncRNAs
+rule novel_transcripts_fasta:
+	input:
+		novel_transcripts_gtf = config["dir"]["outdir"]+"/GTF_merged/{species}.gtf", 
+		reference_fasta = lambda wc: config['ref_genome'][wc.species],
+	output:
+		novel_transcripts_fasta = config["dir"]["outdir"]+"/salmon_index/fasta/{species}.fa", 
+	wildcard_constraints:
+		species = '\w+'
+	conda:
+		"conda/gffread.yaml"
+	shell:
+		"""
+			gffread -w {output.novel_transcripts_fasta} -g {input.reference_fasta} {input.novel_transcripts_gtf}
+		"""
+
+
+## salmon_index :               Create Salmon index for each Transcript FASTA
+rule salmon_index:
+	input:
+		novel_transcripts_fasta = config["dir"]["outdir"]+"/salmon_index/fasta/{species}.fa", 
+	output:
+		dummy_output = config["dir"]["outdir"]+"/salmon_index/{species}/dummy.txt", 
+	wildcard_constraints:
+		species = '\w+'
+	params:
+		index = config["dir"]["outdir"]+"/salmon_index/{species}",
+	conda:
+		"conda/salmon.yaml"
+	shell:
+		"""
+			salmon index -t {input.novel_transcripts_fasta} -i {params.index} && \
+			touch {output.dummy_output}
+		"""
+
+
+## salmon_quant :               Quantify lncRNAs using Salmon Quant
+rule salmon_quant:
+	input:
+		dummy_file = expand(config["dir"]["outdir"]+"/salmon_index/{species}/dummy.txt", species=SPECIESS),
+		read1 = config["dir"]["raw_datadir"]+"/{replicate}_R1.fq.gz",
+		read2 = config["dir"]["raw_datadir"]+"/{replicate}_R2.fq.gz",
+		gtf = lambda wc : config["dir"]["outdir"]+"/GTF_merged/"+wc.replicate.split("_")[0]+".gtf",
+	output:
+		dummy_output = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant/dummy.txt",
+		quant_genes = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant/quant.genes.sf",
+		quant_transcripts = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant/quant.sf"
+	wildcard_constraints:
+		species = '\w+'
+	params:
+		index = lambda wc : config["dir"]["outdir"]+"/salmon_index/"+wc.replicate.split("_")[0], 
+		output_dir = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant"
+	conda:
+		"conda/salmon.yaml"
+	shell:
+		"""
+			salmon quant -i {params.index} -l A -1 {input.read1} -2 {input.read2} -p 8 -g {input.gtf} -o {params.output_dir} && \
+			touch {output.dummy_output}
+		"""
+
+
+## tpm_quant :                  Fetches TPM out of quant files and create lncRNA - TPM files
+rule tpm_quant:
+	input:
+		quant_genes = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant/quant.genes.sf",
+	output:
+		tpm_genes = config["dir"]["outdir"]+"/salmon_count/{replicate}_quant/tpm.genes.sf",
+	wildcard_constraints:
+		replicate = '\w+'
+	shell:
+		"""
+			awk -F "\t" "{{ {{print $1"\t"$4}} }}" {input.quant_genes} > {output.tpm_genes}
+		"""
+
+
+## tpm_matrix :                 Create TPM matrix for lncRNAs in different replicates
+##                              Uses 'tpm_matrix_inputs' function to generate list of replicates
+rule tpm_matrix:
+	input:
+		tpms = lambda wildcards: tpm_matrix_inputs('{sample}'.format(sample=wildcards.sample))
+	output:
+		tpm_matrix = config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.genes.tsv",
+	params:
+		scripts = config["scripts"]
+	wildcard_constraints:
+		species = '\w+'
+	shell:
+		"""
+			python {params.scripts}/tpm_matrix_filter.py {input.tpms} > {output.tpm_matrix}
+		"""
+
+
+## tpm_mean :                   Calculate mean for each lncRNAs from the matrix, this rule can 
+##                              automatically changes equation for replicates number 1 to 3
+rule tpm_mean:
+	input:
+		tpm_matrix = config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.genes.tsv",
+	output:
+		tpm_matrix_filtered = config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.genes.mean.tsv",
+	wildcard_constraints:
+		replicate = '\w+'
+	shell:
+		"""
+			awk 'NR==1{{next}}; {{ printf("%s\t", $1); if(NF==2) printf("%.2f\n", $2); else if(NF==3) printf("%.2f\n", ($2 + $3)/2); else if(NF==4) printf("%.2f\n", ($2 + $3 + $4)/3);}}' {input.tpm_matrix} > {output.tpm_matrix_filtered}
+		"""
+
+	
+## tpm_filter :                 Removes lncNRAs with less than 1 mean TPM
+rule tpm_filter:
+	input:
+		tpm_matrix_filtered = config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.genes.mean.tsv",
+	output:
+		tpm_matrix_mean = config["dir"]["outdir"]+"/salmon_count/{sample}_quant/tpm.mean_morethan1.tsv",
+	wildcard_constraints:
+		replicate = '\w+'
+	shell:
+		"""
+			awk '{{if ($2 > 1) printf("%s\t%.f\n", $1,$2)}}' {input.tpm_matrix_filtered} > {output.tpm_matrix_mean}
+		"""
