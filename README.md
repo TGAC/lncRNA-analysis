@@ -25,9 +25,11 @@ The second part of pipeline works with following steps:
 * filter lncRNAs withh low expression value
 
 ## Pipeline
-A simple overview showing part 1 of pipeline is as below:
+A simple overview of pipeline is shown below:
 
-<img src="img/pipeline.svg" height=1000px title="pipeline-overview" />
+Part 1 (Snakefile)          |  Part 2 (Snakefile_quantification)
+:-------------------------:|:-------------------------:
+<img src="img/lncRNA-step1.svg" height=1000px title="pipeline-overview" /> | <img src="img/salmon_quantification.svg" height=500px title="pipeline-overview" />
 
 ## Creating Conda environment
 This pipeline uses conda environments. Snakemake will create conda environment during the first run of the pipeline. However, if running this pipeline on High Performance Computing (HPC) it may not have active internet connection. In that case, conda environment can be created using `snakemake -s env_snakefile --useconda` command from the node with internet connection. And then pipeline will be able to utilise existing environments.
