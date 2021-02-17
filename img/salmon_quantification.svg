@@ -38,7 +38,7 @@
 <g id="node4" class="node"><title>3</title>
 <path fill="none" stroke="#56d8a9" stroke-width="2" stroke-dasharray="5,2" d="M186.278,-252C186.278,-252 127.722,-252 127.722,-252 121.722,-252 115.722,-246 115.722,-240 115.722,-240 115.722,-228 115.722,-228 115.722,-222 121.722,-216 127.722,-216 127.722,-216 186.278,-216 186.278,-216 192.278,-216 198.278,-222 198.278,-228 198.278,-228 198.278,-240 198.278,-240 198.278,-246 192.278,-252 186.278,-252"/>
 <text text-anchor="middle" x="157" y="-237" font-family="sans" font-size="10.00">tpm_matrix</text>
-<text text-anchor="middle" x="157" y="-225" font-family="sans" font-size="10.00">sample: LAN_D</text>
+<text text-anchor="middle" x="157" y="-225" font-family="sans" font-size="10.00">sample: ARI_D</text>
 </g>
 <!-- 3&#45;&gt;2 -->
 <g id="edge3" class="edge"><title>3&#45;&gt;2</title>
@@ -79,7 +79,7 @@
 <g id="node8" class="node"><title>7</title>
 <path fill="none" stroke="#56c9d8" stroke-width="2" stroke-dasharray="5,2" d="M80.5996,-396C80.5996,-396 11.4004,-396 11.4004,-396 5.40042,-396 -0.599581,-390 -0.599581,-384 -0.599581,-384 -0.599581,-372 -0.599581,-372 -0.599581,-366 5.40042,-360 11.4004,-360 11.4004,-360 80.5996,-360 80.5996,-360 86.5996,-360 92.5996,-366 92.5996,-372 92.5996,-372 92.5996,-384 92.5996,-384 92.5996,-390 86.5996,-396 80.5996,-396"/>
 <text text-anchor="middle" x="46" y="-381" font-family="sans" font-size="10.00">salmon_quant</text>
-<text text-anchor="middle" x="46" y="-369" font-family="sans" font-size="10.00">replicate: LAN_D1</text>
+<text text-anchor="middle" x="46" y="-369" font-family="sans" font-size="10.00">replicate: ARI_D1</text>
 </g>
 <!-- 7&#45;&gt;4 -->
 <g id="edge7" class="edge"><title>7&#45;&gt;4</title>
@@ -90,7 +90,7 @@
 <g id="node9" class="node"><title>8</title>
 <path fill="none" stroke="#56c9d8" stroke-width="2" stroke-dasharray="5,2" d="M191.6,-396C191.6,-396 122.4,-396 122.4,-396 116.4,-396 110.4,-390 110.4,-384 110.4,-384 110.4,-372 110.4,-372 110.4,-366 116.4,-360 122.4,-360 122.4,-360 191.6,-360 191.6,-360 197.6,-360 203.6,-366 203.6,-372 203.6,-372 203.6,-384 203.6,-384 203.6,-390 197.6,-396 191.6,-396"/>
 <text text-anchor="middle" x="157" y="-381" font-family="sans" font-size="10.00">salmon_quant</text>
-<text text-anchor="middle" x="157" y="-369" font-family="sans" font-size="10.00">replicate: LAN_D2</text>
+<text text-anchor="middle" x="157" y="-369" font-family="sans" font-size="10.00">replicate: ARI_D2</text>
 </g>
 <!-- 8&#45;&gt;5 -->
 <g id="edge8" class="edge"><title>8&#45;&gt;5</title>
@@ -101,7 +101,7 @@
 <g id="node10" class="node"><title>9</title>
 <path fill="none" stroke="#56c9d8" stroke-width="2" stroke-dasharray="5,2" d="M302.6,-396C302.6,-396 233.4,-396 233.4,-396 227.4,-396 221.4,-390 221.4,-384 221.4,-384 221.4,-372 221.4,-372 221.4,-366 227.4,-360 233.4,-360 233.4,-360 302.6,-360 302.6,-360 308.6,-360 314.6,-366 314.6,-372 314.6,-372 314.6,-384 314.6,-384 314.6,-390 308.6,-396 302.6,-396"/>
 <text text-anchor="middle" x="268" y="-381" font-family="sans" font-size="10.00">salmon_quant</text>
-<text text-anchor="middle" x="268" y="-369" font-family="sans" font-size="10.00">replicate: LAN_D3</text>
+<text text-anchor="middle" x="268" y="-369" font-family="sans" font-size="10.00">replicate: ARI_D3</text>
 </g>
 <!-- 9&#45;&gt;6 -->
 <g id="edge9" class="edge"><title>9&#45;&gt;6</title>
@@ -132,7 +132,7 @@
 <g id="node12" class="node"><title>11</title>
 <path fill="none" stroke="#d88d56" stroke-width="2" stroke-dasharray="5,2" d="M203.07,-612C203.07,-612 148.93,-612 148.93,-612 142.93,-612 136.93,-606 136.93,-600 136.93,-600 136.93,-588 136.93,-588 136.93,-582 142.93,-576 148.93,-576 148.93,-576 203.07,-576 203.07,-576 209.07,-576 215.07,-582 215.07,-588 215.07,-588 215.07,-600 215.07,-600 215.07,-606 209.07,-612 203.07,-612"/>
 <text text-anchor="middle" x="176" y="-597" font-family="sans" font-size="10.00">stringtie_merge</text>
-<text text-anchor="middle" x="176" y="-585" font-family="sans" font-size="10.00">species: LAN</text>
+<text text-anchor="middle" x="176" y="-585" font-family="sans" font-size="10.00">species: ARI</text>
 </g>
 <!-- 11&#45;&gt;7 -->
 <g id="edge11" class="edge"><title>11&#45;&gt;7</title>
