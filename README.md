@@ -1,5 +1,5 @@
 # lncRNA-analysis
-A Snakemake-based pipeline to annotate lncRNA using existing annotation. 
+A Snakemake-based pipeline to annotate novel lncRNA using existing annotation. 
 
 ## Description
 This pipeline uses various bioinformatics tools to annotate lncRNA. It requires reference genome(s) (optional HISAT index), sequencing reads, and reference annotation(s).
