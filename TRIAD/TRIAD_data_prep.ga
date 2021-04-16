@@ -1,0 +1,1579 @@
+{
+    "a_galaxy_workflow": "true",
+    "annotation": "A workflow to prepare data for TRIAD workflow",
+    "creator": [
+        {
+            "class": "Person",
+            "name": "Anil Thanki"
+        }
+    ],
+    "format-version": "0.1",
+    "license": "MIT",
+    "name": "TRIAD data prep",
+    "steps": {
+        "0": {
+            "annotation": "List of transcriptIDs for genome B",
+            "content_id": null,
+            "errors": null,
+            "id": 0,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "List of transcriptIDs for genome B",
+                    "name": "lncRNA_list_B"
+                }
+            ],
+            "label": "lncRNA_list_B",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 148.8000030517578,
+                "height": 61.80000305175781,
+                "left": 468,
+                "right": 668,
+                "top": 87,
+                "width": 200,
+                "x": 468,
+                "y": 87
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "f524f247-a290-4e77-9e91-de5617884ce8",
+            "workflow_outputs": []
+        },
+        "1": {
+            "annotation": "Fasta sequences",
+            "content_id": null,
+            "errors": null,
+            "id": 1,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Fasta sequences",
+                    "name": "Genome"
+                }
+            ],
+            "label": "Genome",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 311.8000030517578,
+                "height": 61.80000305175781,
+                "left": 468,
+                "right": 668,
+                "top": 250,
+                "width": 200,
+                "x": 468,
+                "y": 250
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "386a8bfc-326b-4500-9014-e4826856fb04",
+            "workflow_outputs": []
+        },
+        "2": {
+            "annotation": "List of transcriptIDs for genome D",
+            "content_id": null,
+            "errors": null,
+            "id": 2,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "List of transcriptIDs for genome D",
+                    "name": "lncRNA_list_D"
+                }
+            ],
+            "label": "lncRNA_list_D",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 411.8000030517578,
+                "height": 61.80000305175781,
+                "left": 468,
+                "right": 668,
+                "top": 350,
+                "width": 200,
+                "x": 468,
+                "y": 350
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "35cfd872-ce5b-4f7f-bec2-dfc2b8bbf3d3",
+            "workflow_outputs": []
+        },
+        "3": {
+            "annotation": "Name of the species/cultivar - Please make sure of no white space at the end",
+            "content_id": null,
+            "errors": null,
+            "id": 3,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "Name of the species/cultivar - Please make sure of no white space at the end",
+                    "name": "species"
+                }
+            ],
+            "label": "species",
+            "name": "Input parameter",
+            "outputs": [],
+            "position": {
+                "bottom": 547.8000030517578,
+                "height": 61.80000305175781,
+                "left": 766,
+                "right": 966,
+                "top": 486,
+                "width": 200,
+                "x": 766,
+                "y": 486
+            },
+            "tool_id": null,
+            "tool_state": "{\"parameter_type\": \"text\", \"optional\": false}",
+            "tool_version": null,
+            "type": "parameter_input",
+            "uuid": "dee2b2c5-d927-4897-ace1-feb35fb5fd28",
+            "workflow_outputs": []
+        },
+        "4": {
+            "annotation": "List of transcriptIDs for genome A",
+            "content_id": null,
+            "errors": null,
+            "id": 4,
+            "input_connections": {},
+            "inputs": [
+                {
+                    "description": "List of transcriptIDs for genome A",
+                    "name": "lncRNA_list_A"
+                }
+            ],
+            "label": "lncRNA_list_A",
+            "name": "Input dataset",
+            "outputs": [],
+            "position": {
+                "bottom": 914.8000030517578,
+                "height": 61.80000305175781,
+                "left": 468,
+                "right": 668,
+                "top": 853,
+                "width": 200,
+                "x": 468,
+                "y": 853
+            },
+            "tool_id": null,
+            "tool_state": "{\"optional\": false}",
+            "tool_version": null,
+            "type": "data_input",
+            "uuid": "087674bb-e4fe-4315-b38e-71260530cc7b",
+            "workflow_outputs": []
+        },
+        "5": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 5,
+            "input_connections": {
+                "input": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Add _ B",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 164.1999969482422,
+                "height": 93.19999694824219,
+                "left": 766,
+                "right": 966,
+                "top": 71,
+                "width": 200,
+                "x": 766,
+                "y": 71
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"_\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "534f9491-2f81-4b65-9343-640bc82ed89b",
+            "workflow_outputs": []
+        },
+        "6": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "errors": null,
+            "id": 6,
+            "input_connections": {
+                "input_fasta_fp": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "selection|seq_id_fp": {
+                    "id": 0,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Filter fasta",
+            "outputs": [
+                {
+                    "name": "fitered_fasta",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 33,
+                "height": 246,
+                "left": 766,
+                "right": 966,
+                "top": -213,
+                "width": 200,
+                "x": 766,
+                "y": -213
+            },
+            "post_job_actions": {
+                "HideDatasetActionfitered_fasta": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "11b19edeb3af",
+                "name": "qiime_filter_fasta",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"fasta\", \"chromInfo\": \"/tgac/services/galaxy/prod/galaxy/tool-data/shared/ucsc/chrom/?.len\", \"input_fasta_fp\": {\"__class__\": \"ConnectedValue\"}, \"negate\": \"false\", \"selection\": {\"type\": \"seq_list\", \"__current_case__\": 1, \"seq_id_fp\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.9.1.0",
+            "type": "tool",
+            "uuid": "b439ad2a-984e-430f-a8cb-a7f7df2f16dd",
+            "workflow_outputs": []
+        },
+        "7": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "errors": null,
+            "id": 7,
+            "input_connections": {
+                "input_fasta_fp": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "selection|seq_id_fp": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Filter fasta",
+            "outputs": [
+                {
+                    "name": "fitered_fasta",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 448,
+                "height": 246,
+                "left": 766,
+                "right": 966,
+                "top": 202,
+                "width": 200,
+                "x": 766,
+                "y": 202
+            },
+            "post_job_actions": {
+                "HideDatasetActionfitered_fasta": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "11b19edeb3af",
+                "name": "qiime_filter_fasta",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"fasta\", \"chromInfo\": \"/tgac/services/galaxy/prod/galaxy/tool-data/shared/ucsc/chrom/?.len\", \"input_fasta_fp\": {\"__class__\": \"ConnectedValue\"}, \"negate\": \"false\", \"selection\": {\"type\": \"seq_list\", \"__current_case__\": 1, \"seq_id_fp\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.9.1.0",
+            "type": "tool",
+            "uuid": "a1171c2c-0ad4-4693-afee-8e57cf95c4d4",
+            "workflow_outputs": []
+        },
+        "8": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 8,
+            "input_connections": {
+                "input": {
+                    "id": 2,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Add _ to D",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 679.1999969482422,
+                "height": 93.19999694824219,
+                "left": 766,
+                "right": 966,
+                "top": 586,
+                "width": 200,
+                "x": 766,
+                "y": 586
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"_\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "a07442fb-15f8-4113-a721-ae63243623bb",
+            "workflow_outputs": []
+        },
+        "9": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "errors": null,
+            "id": 9,
+            "input_connections": {
+                "input_fasta_fp": {
+                    "id": 1,
+                    "output_name": "output"
+                },
+                "selection|seq_id_fp": {
+                    "id": 4,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Filter fasta",
+            "outputs": [
+                {
+                    "name": "fitered_fasta",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 963,
+                "height": 246,
+                "left": 766,
+                "right": 966,
+                "top": 717,
+                "width": 200,
+                "x": 766,
+                "y": 717
+            },
+            "post_job_actions": {
+                "HideDatasetActionfitered_fasta": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/iuc/qiime_filter_fasta/qiime_filter_fasta/1.9.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "11b19edeb3af",
+                "name": "qiime_filter_fasta",
+                "owner": "iuc",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"__input_ext\": \"fasta\", \"chromInfo\": \"/tgac/services/galaxy/prod/galaxy/tool-data/shared/ucsc/chrom/?.len\", \"input_fasta_fp\": {\"__class__\": \"ConnectedValue\"}, \"negate\": \"false\", \"selection\": {\"type\": \"seq_list\", \"__current_case__\": 1, \"seq_id_fp\": {\"__class__\": \"ConnectedValue\"}}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.9.1.0",
+            "type": "tool",
+            "uuid": "0d597777-53b0-473a-8029-1505ab674dcc",
+            "workflow_outputs": []
+        },
+        "10": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 10,
+            "input_connections": {
+                "input": {
+                    "id": 4,
+                    "output_name": "output"
+                }
+            },
+            "inputs": [],
+            "label": "Add _ to A",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 1094.1999969482422,
+                "height": 93.19999694824219,
+                "left": 766,
+                "right": 966,
+                "top": 1001,
+                "width": 200,
+                "x": 766,
+                "y": 1001
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"_\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "c30c78d0-226f-4e64-8bf6-1ff2a4ec981c",
+            "workflow_outputs": []
+        },
+        "11": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 11,
+            "input_connections": {
+                "exp": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "input": {
+                    "id": 5,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add species to B",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 271.6000061035156,
+                "height": 123.60000610351562,
+                "left": 1054,
+                "right": 1254,
+                "top": 148,
+                "width": 200,
+                "x": 1054,
+                "y": 148
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": {\"__class__\": \"ConnectedValue\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "6228389a-6d32-44c2-a1c5-71407692d35e",
+            "workflow_outputs": []
+        },
+        "12": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 12,
+            "input_connections": {
+                "exp": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "input": {
+                    "id": 8,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add species to D",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 602.6000061035156,
+                "height": 123.60000610351562,
+                "left": 1054,
+                "right": 1254,
+                "top": 479,
+                "width": 200,
+                "x": 1054,
+                "y": 479
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": {\"__class__\": \"ConnectedValue\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "71d8b9c9-aff6-42bd-8de9-3a659fc99a6c",
+            "workflow_outputs": []
+        },
+        "13": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 13,
+            "input_connections": {
+                "exp": {
+                    "id": 3,
+                    "output_name": "output"
+                },
+                "input": {
+                    "id": 10,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add species to A",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 897.6000061035156,
+                "height": 123.60000610351562,
+                "left": 1054,
+                "right": 1254,
+                "top": 774,
+                "width": 200,
+                "x": 1054,
+                "y": 774
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": {\"__class__\": \"ConnectedValue\"}, \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "de0a33c6-de54-44a1-8903-06ada1b716aa",
+            "workflow_outputs": []
+        },
+        "14": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 14,
+            "input_connections": {
+                "input": {
+                    "id": 11,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add B",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 256.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1332,
+                "right": 1532,
+                "top": 163,
+                "width": 200,
+                "x": 1332,
+                "y": 163
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"B\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "f1674b49-02a2-4f5f-b0d2-278129a60158",
+            "workflow_outputs": []
+        },
+        "15": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 15,
+            "input_connections": {
+                "input": {
+                    "id": 12,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add D",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 569.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1332,
+                "right": 1532,
+                "top": 476,
+                "width": 200,
+                "x": 1332,
+                "y": 476
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"D\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "7512e453-575a-403e-b281-42c480d615f9",
+            "workflow_outputs": []
+        },
+        "16": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 16,
+            "input_connections": {
+                "input": {
+                    "id": 13,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add A",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 882.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1332,
+                "right": 1532,
+                "top": 789,
+                "width": 200,
+                "x": 1332,
+                "y": 789
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"A\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "5dccec0e-0259-41e4-90ce-7fe2bea1628f",
+            "workflow_outputs": []
+        },
+        "17": {
+            "annotation": "",
+            "content_id": "mergeCols1",
+            "errors": null,
+            "id": 17,
+            "input_connections": {
+                "input1": {
+                    "id": 14,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "B dataset",
+            "name": "Merge Columns",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 256.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1610,
+                "right": 1810,
+                "top": 163,
+                "width": 200,
+                "x": 1610,
+                "y": 163
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "mergeCols1",
+            "tool_state": "{\"col1\": \"1\", \"col2\": \"2\", \"columns\": [{\"__index__\": 0, \"datacol\": \"3\"}, {\"__index__\": 1, \"datacol\": \"4\"}], \"input1\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "40d270c4-6f75-4113-a453-a6cd19efb252",
+            "workflow_outputs": []
+        },
+        "18": {
+            "annotation": "",
+            "content_id": "mergeCols1",
+            "errors": null,
+            "id": 18,
+            "input_connections": {
+                "input1": {
+                    "id": 15,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "D dataset",
+            "name": "Merge Columns",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 569.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1610,
+                "right": 1810,
+                "top": 476,
+                "width": 200,
+                "x": 1610,
+                "y": 476
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "mergeCols1",
+            "tool_state": "{\"col1\": \"1\", \"col2\": \"2\", \"columns\": [{\"__index__\": 0, \"datacol\": \"3\"}, {\"__index__\": 1, \"datacol\": \"4\"}], \"input1\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "96e32549-753f-4d2c-812b-241a81e54f4a",
+            "workflow_outputs": []
+        },
+        "19": {
+            "annotation": "",
+            "content_id": "mergeCols1",
+            "errors": null,
+            "id": 19,
+            "input_connections": {
+                "input1": {
+                    "id": 16,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "A dataset",
+            "name": "Merge Columns",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 882.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1610,
+                "right": 1810,
+                "top": 789,
+                "width": 200,
+                "x": 1610,
+                "y": 789
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "mergeCols1",
+            "tool_state": "{\"col1\": \"1\", \"col2\": \"2\", \"columns\": [{\"__index__\": 0, \"datacol\": \"3\"}, {\"__index__\": 1, \"datacol\": \"4\"}], \"input1\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.1",
+            "type": "tool",
+            "uuid": "ca6ece8e-58d5-4435-b936-601736d043fc",
+            "workflow_outputs": []
+        },
+        "20": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 20,
+            "input_connections": {
+                "input": {
+                    "id": 17,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 125.19999694824219,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 32,
+                "width": 200,
+                "x": 1888,
+                "y": 32
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c1,c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "ddd590ca-3af7-4540-9b9e-46af31654b8c",
+            "workflow_outputs": []
+        },
+        "21": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 21,
+            "input_connections": {
+                "input": {
+                    "id": 17,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 256.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 163,
+                "width": 200,
+                "x": 1888,
+                "y": 163
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "a78df74e-ffec-46a2-96fb-c7f85403bc75",
+            "workflow_outputs": []
+        },
+        "22": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 22,
+            "input_connections": {
+                "input": {
+                    "id": 18,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 438.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 345,
+                "width": 200,
+                "x": 1888,
+                "y": 345
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c1,c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "c42d915e-7044-42ea-8b24-042247401bd6",
+            "workflow_outputs": []
+        },
+        "23": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 23,
+            "input_connections": {
+                "input": {
+                    "id": 18,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 569.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 476,
+                "width": 200,
+                "x": 1888,
+                "y": 476
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "3a45a71b-00fd-4c65-96b0-d29ed1e6d355",
+            "workflow_outputs": []
+        },
+        "24": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 24,
+            "input_connections": {
+                "input": {
+                    "id": 19,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 751.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 658,
+                "width": 200,
+                "x": 1888,
+                "y": 658
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c1,c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "41b6577b-64ff-4b78-a05a-e9d24a15ab45",
+            "workflow_outputs": []
+        },
+        "25": {
+            "annotation": "",
+            "content_id": "Cut1",
+            "errors": null,
+            "id": 25,
+            "input_connections": {
+                "input": {
+                    "id": 19,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": null,
+            "name": "Cut",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "tabular"
+                }
+            ],
+            "position": {
+                "bottom": 882.1999969482422,
+                "height": 93.19999694824219,
+                "left": 1888,
+                "right": 2088,
+                "top": 789,
+                "width": 200,
+                "x": 1888,
+                "y": 789
+            },
+            "post_job_actions": {
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "Cut1",
+            "tool_state": "{\"columnList\": \"c5\", \"delimiter\": \"T\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.2",
+            "type": "tool",
+            "uuid": "5857f7b5-71ca-45e9-a139-4a1787049bea",
+            "workflow_outputs": []
+        },
+        "26": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "errors": null,
+            "id": 26,
+            "input_connections": {
+                "input1": {
+                    "id": 20,
+                    "output_name": "out_file1"
+                },
+                "input2": {
+                    "id": 6,
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "inputs": [
+                {
+                    "description": "runtime parameter for tool Change fasta header",
+                    "name": "input1"
+                },
+                {
+                    "description": "runtime parameter for tool Change fasta header",
+                    "name": "input2"
+                }
+            ],
+            "label": "lncRNA fasta for B",
+            "name": "Change fasta header",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 22,
+                "height": 144,
+                "left": 2166,
+                "right": 2366,
+                "top": -122,
+                "width": 200,
+                "x": 2166,
+                "y": -122
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "lncRNA fasta for B"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "540425dc9746",
+                "name": "change_fasta_header_using_tabular_file",
+                "owner": "portiahollyoak",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input1\": {\"__class__\": \"RuntimeValue\"}, \"input2\": {\"__class__\": \"RuntimeValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "2c435655-8e71-452b-8e80-898d5f82b783",
+            "workflow_outputs": [
+                {
+                    "label": "lncRNA fasta for B",
+                    "output_name": "output",
+                    "uuid": "9cc54df6-02dc-4374-afa3-f9a4b37348ec"
+                }
+            ]
+        },
+        "27": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 27,
+            "input_connections": {
+                "input": {
+                    "id": 21,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add 1 to B",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 256.1999969482422,
+                "height": 93.19999694824219,
+                "left": 2166,
+                "right": 2366,
+                "top": 163,
+                "width": 200,
+                "x": 2166,
+                "y": 163
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "343d0829-6c83-4763-aeb5-1bf72d683f74",
+            "workflow_outputs": []
+        },
+        "28": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "errors": null,
+            "id": 28,
+            "input_connections": {
+                "input1": {
+                    "id": 22,
+                    "output_name": "out_file1"
+                },
+                "input2": {
+                    "id": 7,
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "inputs": [],
+            "label": "lncRNA fasta for D",
+            "name": "Change fasta header",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 438,
+                "height": 144,
+                "left": 2166,
+                "right": 2366,
+                "top": 294,
+                "width": 200,
+                "x": 2166,
+                "y": 294
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "lncRNA fasta for D"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "540425dc9746",
+                "name": "change_fasta_header_using_tabular_file",
+                "owner": "portiahollyoak",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"input2\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "3e5e82f7-bce2-4428-998d-6c27bcdae3b5",
+            "workflow_outputs": [
+                {
+                    "label": "lncRNA fasta for D",
+                    "output_name": "output",
+                    "uuid": "7272be69-485a-4874-8f4a-4b899565814d"
+                }
+            ]
+        },
+        "29": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 29,
+            "input_connections": {
+                "input": {
+                    "id": 23,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add 4 to D",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 569.1999969482422,
+                "height": 93.19999694824219,
+                "left": 2166,
+                "right": 2366,
+                "top": 476,
+                "width": 200,
+                "x": 2166,
+                "y": 476
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"4\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "35756255-1a8b-445a-8211-fcc832384554",
+            "workflow_outputs": []
+        },
+        "30": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "errors": null,
+            "id": 30,
+            "input_connections": {
+                "input1": {
+                    "id": 24,
+                    "output_name": "out_file1"
+                },
+                "input2": {
+                    "id": 9,
+                    "output_name": "fitered_fasta"
+                }
+            },
+            "inputs": [],
+            "label": "lncRNA fasta for A",
+            "name": "Change fasta header",
+            "outputs": [
+                {
+                    "name": "output",
+                    "type": "fasta"
+                }
+            ],
+            "position": {
+                "bottom": 751,
+                "height": 144,
+                "left": 2166,
+                "right": 2366,
+                "top": 607,
+                "width": 200,
+                "x": 2166,
+                "y": 607
+            },
+            "post_job_actions": {
+                "RenameDatasetActionoutput": {
+                    "action_arguments": {
+                        "newname": "lncRNA fasta for A"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "output"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/portiahollyoak/change_fasta_header_using_tabular_file/change_fasta_header_using_tabular_file/ 0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "540425dc9746",
+                "name": "change_fasta_header_using_tabular_file",
+                "owner": "portiahollyoak",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"input1\": {\"__class__\": \"ConnectedValue\"}, \"input2\": {\"__class__\": \"ConnectedValue\"}, \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "c2e2ddb3-9d68-4088-8200-1061325699c3",
+            "workflow_outputs": [
+                {
+                    "label": "lncRNA fasta for A",
+                    "output_name": "output",
+                    "uuid": "21a6f9d2-c8ca-48fa-b380-53de28c92270"
+                }
+            ]
+        },
+        "31": {
+            "annotation": "",
+            "content_id": "addValue",
+            "errors": null,
+            "id": 31,
+            "input_connections": {
+                "input": {
+                    "id": 25,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Add 1 to A",
+            "name": "Add column",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 882.1999969482422,
+                "height": 93.19999694824219,
+                "left": 2166,
+                "right": 2366,
+                "top": 789,
+                "width": 200,
+                "x": 2166,
+                "y": 789
+            },
+            "post_job_actions": {
+                "ChangeDatatypeActionout_file1": {
+                    "action_arguments": {
+                        "newtype": "tabular"
+                    },
+                    "action_type": "ChangeDatatypeAction",
+                    "output_name": "out_file1"
+                },
+                "HideDatasetActionout_file1": {
+                    "action_arguments": {},
+                    "action_type": "HideDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "addValue",
+            "tool_state": "{\"exp\": \"1\", \"input\": {\"__class__\": \"ConnectedValue\"}, \"iterate\": \"no\", \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "1.0.0",
+            "type": "tool",
+            "uuid": "86cb977d-2ea0-4dba-8be7-7296df33dff8",
+            "workflow_outputs": []
+        },
+        "32": {
+            "annotation": "",
+            "content_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_cat/0.1.0",
+            "errors": null,
+            "id": 32,
+            "input_connections": {
+                "inputs": {
+                    "id": 27,
+                    "output_name": "out_file1"
+                },
+                "queries_0|inputs2": {
+                    "id": 29,
+                    "output_name": "out_file1"
+                },
+                "queries_1|inputs2": {
+                    "id": 31,
+                    "output_name": "out_file1"
+                }
+            },
+            "inputs": [],
+            "label": "Create Category",
+            "name": "Concatenate datasets",
+            "outputs": [
+                {
+                    "name": "out_file1",
+                    "type": "input"
+                }
+            ],
+            "position": {
+                "bottom": 617,
+                "height": 154,
+                "left": 2444,
+                "right": 2644,
+                "top": 463,
+                "width": 200,
+                "x": 2444,
+                "y": 463
+            },
+            "post_job_actions": {
+                "RenameDatasetActionout_file1": {
+                    "action_arguments": {
+                        "newname": "Category File"
+                    },
+                    "action_type": "RenameDatasetAction",
+                    "output_name": "out_file1"
+                }
+            },
+            "tool_id": "toolshed.g2.bx.psu.edu/repos/bgruening/text_processing/tp_cat/0.1.0",
+            "tool_shed_repository": {
+                "changeset_revision": "0a8c6b61f0f4",
+                "name": "text_processing",
+                "owner": "bgruening",
+                "tool_shed": "toolshed.g2.bx.psu.edu"
+            },
+            "tool_state": "{\"inputs\": {\"__class__\": \"ConnectedValue\"}, \"queries\": [{\"__index__\": 0, \"inputs2\": {\"__class__\": \"ConnectedValue\"}}, {\"__index__\": 1, \"inputs2\": {\"__class__\": \"ConnectedValue\"}}], \"__page__\": null, \"__rerun_remap_job_id__\": null}",
+            "tool_version": "0.1.0",
+            "type": "tool",
+            "uuid": "53a3c203-5f5f-442d-b41d-0ebba5425aa6",
+            "workflow_outputs": [
+                {
+                    "label": "Category File",
+                    "output_name": "out_file1",
+                    "uuid": "b133e808-543b-45b8-9b51-f30652470540"
+                }
+            ]
+        }
+    },
+    "tags": [],
+    "uuid": "e2cbef7f-12c4-4865-b182-dfdcefe20215",
+    "version": 21
+}
